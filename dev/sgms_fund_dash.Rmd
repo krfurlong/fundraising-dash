@@ -1,0 +1,113 @@
+---
+title: "SGMS Choral Fundraiser 2020"
+output: 
+  flexdashboard::flex_dashboard:
+    theme: lumen
+    logo: img/wolf_sm.png
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(shiny)
+library(tidyr)
+library(dplyr)
+library(ggthemes)
+library(ggplot2)
+library(plotly)
+
+sales.dat <- data.frame(
+  date = c("2020-01-21", "2020-01-28", "2020-01-29"),
+ # n.orders = c(22, 27),
+  sixth.grade = c(0, 8, 8), #6 is a guess
+  other.grades = c(0, 22, 27), 
+ stringsAsFactors = FALSE
+) %>%
+  mutate(n.orders = sixth.grade + other.grades,
+         money.raised = n.orders*5)
+
+trip.cost <- 127
+```
+
+Column {data-width=75%} 
+-----------------------------------------------------------------------
+
+### Overall Progress to Goal
+
+```{r warning=FALSE}
+goal <- 900
+
+prog.dat <- sales.dat %>%
+  select(date, sixth.grade, other.grades) %>%
+  gather(key = "choir", value = "n.sales", sixth.grade:other.grades) %>%
+  mutate(money.raised = n.sales*5)
+
+prog.dat2 <- sales.dat %>%
+  mutate(sixth.grade.sales = sixth.grade*5,
+         other.grades.sales = other.grades*5)
+
+plot_ly(prog.dat2, x = ~as.Date(date), y = ~sixth.grade.sales, name = '6th Grade', 
+        type = 'scatter', mode = 'none', stackgroup = 'one') %>%
+  add_trace(y = ~other.grades.sales, name = '7th/8th Grade') %>%
+  add_trace(y = goal, mode = "lines", name = "Fundraising Goal", stackgroup = NA) %>%
+  layout(title = list(text="SGMS Hershey Park Fundraiser",
+                      font = list(size =48)),
+         xaxis = list(title = "",
+                      showgrid = FALSE),
+         yaxis = list(title = "Money Raised",
+                      showgrid = TRUE),
+         margin = list(t=120))
+```
+
+
+```
+
+Column {data-width=25%}
+-----------------------------------------------------------------------
+
+### Days Remaining
+
+```{r}
+this.day <- Sys.Date()
+end.date <- as.Date("2020-02-07")
+days.remaining <- as.numeric(end.date-Sys.Date())
+
+valueBox(days.remaining, color = ifelse(days.remaining > 6, "info", ifelse(days.remaining > 3, "warning", "danger")), 
+icon = "fa-calendar-alt")
+
+```
+
+### Percent to Goal
+
+```{r}
+
+goal.percent <- sales.dat %>%
+filter(date == max(as.Date(date) )) %>%
+.$money.raised/goal
+
+perc.f <- paste0(round(goal.percent*100, 1), "%")
+
+
+valueBox(perc.f, color = ifelse(goal.percent < 0.3, "danger", ifelse(goal.percent <0.6, "warning", "success")), 
+icon = ifelse(goal.percent < 0.3, "fa-thermometer-quarter", ifelse(goal.percent <0.6, "fa-thermometer-half", "fa-thermometer-full")))
+
+```
+
+
+### Number of Students Funded
+
+```{r}
+
+num.students <- sales.dat %>%
+filter(date == max(as.Date(date) )) %>%
+.$money.raised/trip.cost
+
+stud.f <- round(num.students, 0)
+
+
+valueBox(stud.f, icon = "fa-user-friends")
+```
+
+
+
