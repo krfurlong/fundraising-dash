@@ -18,11 +18,11 @@ library(ggplot2)
 library(plotly)
 
 sales.dat <- data.frame(
-  date = c("2020-01-21", "2020-01-28", "2020-01-29", "2020-01-30"),
+  date = c("2020-01-21", "2020-01-28", "2020-01-29", "2020-01-30", "2020-01-31"),
  # n.orders = c(22, 27),
-  sixth.grade = c(0, 8, 8, 9), #6 is a guess
-  other.grades = c(0, 22, 27, 27), 
-  satterfields = c(0,0,0,11),
+  sixth.grade = c(0, 8, 8, 9, 10), #6 is a guess
+  other.grades = c(0, 22, 27, 27, 27), 
+  satterfields = c(0,0,0,11, 11),
  stringsAsFactors = FALSE
 ) %>%
   mutate(n.orders = sixth.grade + other.grades+satterfields,
@@ -66,8 +66,8 @@ Column {data-width=25%}
 
 ```{r}
 this.day <- Sys.Date()
-end.date <- as.Date("2020-02-05")
-days.remaining <- as.numeric(end.date-Sys.Date())
+end.date <- as.Date("2020-02-04")
+days.remaining <- as.numeric(end.date-Sys.Date())+1
 
 valueBox(days.remaining, 
          color = ifelse(days.remaining > 6, "info", ifelse(days.remaining > 3, "warning", "danger")), 
