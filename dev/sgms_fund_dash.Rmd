@@ -1,9 +1,9 @@
 ---
-title: "SGMS Choral Fundraiser 2020"
+title: "LMS Choral Fundraiser 2020"
 output: 
   flexdashboard::flex_dashboard:
     theme: lumen
-    logo: img/wolf_sm.png
+    logo: img/lion_sm.png
     orientation: columns
     vertical_layout: fill
 ---
@@ -17,7 +17,7 @@ library(ggthemes)
 library(ggplot2)
 library(plotly)
 
-sales.dat <- data.frame(
+sales.dat.sg <- data.frame(
   date = c("2020-01-21", "2020-01-28", "2020-01-29", "2020-01-30", "2020-01-31"),
  # n.orders = c(22, 27),
   sixth.grade = c(0, 8, 8, 9, 10), #6 is a guess
@@ -28,7 +28,23 @@ sales.dat <- data.frame(
   mutate(n.orders = sixth.grade + other.grades+satterfields,
          money.raised = n.orders*5)
 
-trip.cost <- 127
+sales.dat.loid <- data.frame(
+  date = c("2020-02-03", "2020-02-05", "2020-02-07"),
+ # n.orders = c(22, 27),
+ chamber.choir = c(0, 3,10),
+ adv.choir = c(0,10, 32),
+ debut.voix = c(0,0,0),
+ luna.voce = c(0,3,9),
+ vox.gentum = c(0,0,0),
+  #satterfields = c(0,0,0,11, 11),
+ stringsAsFactors = FALSE
+) %>%
+  mutate(n.orders = chamber.choir + adv.choir+debut.voix+luna.voce+vox.gentum,
+         money.raised = n.orders*5)
+
+sales.dat <- sales.dat.loid
+
+trip.cost <- 150
 ```
 
 Column {data-width=75%} 
@@ -37,19 +53,29 @@ Column {data-width=75%}
 ### Overall Progress to Goal
 
 ```{r warning=FALSE}
-goal <- 900
+goal.sg <- 900
+goal.loid <- 1000
+
+goal <- goal.loid
 
 prog.dat2 <- sales.dat %>%
-  mutate(sixth.grade.sales = sixth.grade*5,
-         other.grades.sales = other.grades*5,
-         satterfield.sales = satterfields*5)
+  gather(key = "choir", value = "n.sales", chamber.choir:vox.gentum) %>%
+  mutate(sales.money = n.sales*5) %>%
+  select(-n.sales) %>%
+  spread(key = choir, value = sales.money)
 
-plot_ly(prog.dat2, x = ~as.Date(date), y = ~sixth.grade.sales, name = '6th Grade', 
+#  mutate(sixth.grade.sales = sixth.grade*5,
+ #        other.grades.sales = other.grades*5,
+  #       satterfield.sales = satterfields*5)
+
+plot_ly(prog.dat2, x = ~as.Date(date), y = ~chamber.choir, name = 'Chamber Choir', 
         type = 'scatter', mode = 'none', stackgroup = 'one') %>%
-  add_trace(y = ~other.grades.sales, name = '7th/8th Grade') %>%
-  add_trace(y = ~satterfield.sales, name = 'Satterfields') %>%
+  add_trace(y = ~adv.choir, name = 'Adv Choir') %>%
+  add_trace(y = ~debut.voix, name = 'Debut Voix') %>%
+  add_trace(y = ~luna.voce, name = 'Luna Voce') %>%
+  add_trace(y = ~vox.gentum, name = 'Vox Gentum') %>%
   add_trace(y = goal, mode = "lines", name = "Fundraising Goal", stackgroup = NA) %>%
-  layout(title = list(text="SGMS Hershey Park Fundraiser",
+  layout(title = list(text="LMS Spring Fundraiser",
                       font = list(size =48)),
          xaxis = list(title = "",
                       showgrid = FALSE),
@@ -66,7 +92,9 @@ Column {data-width=25%}
 
 ```{r}
 this.day <- Sys.Date()
-end.date <- as.Date("2020-02-04")
+end.date.sg <- as.Date("2020-02-04")
+end.date.loid <- as.Date("2020-02-18")
+end.date <- end.date.loid
 days.remaining <- as.numeric(end.date-Sys.Date())+1
 
 valueBox(days.remaining, 
