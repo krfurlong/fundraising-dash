@@ -29,13 +29,13 @@ sales.dat.sg <- data.frame(
          money.raised = n.orders*5)
 
 sales.dat.loid <- data.frame(
-  date = c("2020-02-03", "2020-02-05", "2020-02-07"),
+  date = c("2020-02-03", "2020-02-05", "2020-02-07", "2020-02-10"),
  # n.orders = c(22, 27),
- chamber.choir = c(0, 3,10),
- adv.choir = c(0,10, 32),
- debut.voix = c(0,0,0),
- luna.voce = c(0,3,9),
- vox.gentum = c(0,0,0),
+ chamber.choir = c(0, 3,10, 10),
+ adv.choir = c(0,10, 32, 38),
+ debut.voix = c(0,0,0, 23),
+ luna.voce = c(0,3,9, 32),
+ vox.gentum = c(0,0,0, 22),
   #satterfields = c(0,0,0,11, 11),
  stringsAsFactors = FALSE
 ) %>%
@@ -115,9 +115,9 @@ perc.f <- paste0(round(goal.percent*100, 1), "%")
 
 
 valueBox(perc.f, 
-         color = ifelse(goal.percent < 0.3, "danger", ifelse(goal.percent <0.6, "warning", "success")), 
-         icon = ifelse(goal.percent < 0.3, "fa-thermometer-quarter", 
-                       ifelse(goal.percent <0.6, "fa-thermometer-half", "fa-thermometer-full")))
+         color = ifelse(goal.percent < 0.35, "danger", ifelse(goal.percent < 0.8, "warning", "success")), 
+         icon = ifelse(goal.percent < 0.35, "fa-thermometer-quarter", 
+                       ifelse(goal.percent <0.8, "fa-thermometer-half", "fa-thermometer-full")))
 
 ```
 
