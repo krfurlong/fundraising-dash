@@ -44,7 +44,7 @@ sales.dat.loid <- data.frame(
 
 sales.dat <- sales.dat.loid
 
-trip.cost <- 150
+trip.cost <- 130
 ```
 
 Column {data-width=75%} 
@@ -95,7 +95,7 @@ this.day <- Sys.Date()
 end.date.sg <- as.Date("2020-02-04")
 end.date.loid <- as.Date("2020-02-18")
 end.date <- end.date.loid
-days.remaining <- as.numeric(end.date-Sys.Date())+1
+days.remaining <- as.numeric(end.date-Sys.Date())
 
 valueBox(days.remaining, 
          color = ifelse(days.remaining > 6, "info", ifelse(days.remaining > 3, "warning", "danger")), 
