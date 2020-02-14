@@ -29,13 +29,13 @@ sales.dat.sg <- data.frame(
          money.raised = n.orders*5)
 
 sales.dat.loid <- data.frame(
-  date = c("2020-02-03", "2020-02-05", "2020-02-07", "2020-02-10"),
+  date = c("2020-02-03", "2020-02-05", "2020-02-07", "2020-02-10", "2020-02-14"),
  # n.orders = c(22, 27),
- chamber.choir = c(0, 3,10, 10),
- adv.choir = c(0,10, 32, 38),
- debut.voix = c(0,0,0, 23),
- luna.voce = c(0,3,9, 32),
- vox.gentum = c(0,0,0, 22),
+ chamber.choir = c(0, 3,10, 10, 10),
+ adv.choir = c(0,10, 32, 38, 61),
+ debut.voix = c(0,0,0, 23, 28),
+ luna.voce = c(0,3,9, 32, 32),
+ vox.gentum = c(0,0,0, 22, 22),
   #satterfields = c(0,0,0,11, 11),
  stringsAsFactors = FALSE
 ) %>%
